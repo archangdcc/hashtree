@@ -1114,38 +1114,38 @@ sha256_16_avx512:
 	vpaddd		H, H, [DIGEST + 7*64]
 	
 	# Save digest for later processing
-	vmovdqa32	W0, A
-	vmovdqa32	W1, B
-	vmovdqa32	W2, C
-	vmovdqa32	W3, D
-	vmovdqa32	W4, E
-	vmovdqa32	W5, F
-	vmovdqa32	W6, G
-	vmovdqa32	W7, H
-
+//	vmovdqa32	W0, A
+//	vmovdqa32	W1, B
+//	vmovdqa32	W2, C
+//	vmovdqa32	W3, D
+//	vmovdqa32	W4, E
+//	vmovdqa32	W5, F
+//	vmovdqa32	W6, G
+//	vmovdqa32	W7, H
+//
 	# Load transposing masks
 	vmovdqa32	TMP5, [rip + .LPSHUFFLE_TRANSPOSE_MASK3]
 	vmovdqa32	TMP6, [rip + .LPSHUFFLE_TRANSPOSE_MASK4]
-
-	# Rounds with padding
-.set .Lpadding, 1
-.set .LI, 0
-.rept 64
-	vmovdqa32	TMP4, [PADDING + 64*.LI]	// W + K
-	PROCESS_LOOP TMP4
-	.set .LI, .LI+1
-.endr
+//
+//	# Rounds with padding
+//.set .Lpadding, 1
+//.set .LI, 0
+//.rept 64
+//	vmovdqa32	TMP4, [PADDING + 64*.LI]	// W + K
+//	PROCESS_LOOP TMP4
+//	.set .LI, .LI+1
+//.endr
 	vmovdqa32	W8, [rip + .LPSHUFFLE_BYTE_FLIP_MASK]
-
-	# Add old digest
-	vpaddd		A, A, W0
-	vpaddd		B, B, W1
-	vpaddd		C, C, W2
-	vpaddd		D, D, W3
-	vpaddd		E, E, W4
-	vpaddd		F, F, W5
-	vpaddd		G, G, W6
-	vpaddd		H, H, W7
+//
+//	# Add old digest
+//	vpaddd		A, A, W0
+//	vpaddd		B, B, W1
+//	vpaddd		C, C, W2
+//	vpaddd		D, D, W3
+//	vpaddd		E, E, W4
+//	vpaddd		F, F, W5
+//	vpaddd		G, G, W6
+//	vpaddd		H, H, W7
 
 	# Transpose, output and loop
 	TRANSPOSE_8x16_U32 A, B, C, D, E, F, G, H,\

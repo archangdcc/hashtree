@@ -29,11 +29,11 @@ LDFLAGS += -L .
 testlibs = -lhashtree
 benchlibs = -lhashtree -lm
 
-ifeq ($(HAVE_OPENSSL),1)
+# ifeq ($(HAVE_OPENSSL),1)
 CFLAGS += -DHAVE_OPENSSL
 benchlibs += -lcrypto
 testlibs += -lcrypto
-endif
+# endif
 
 objarm = sha256_armv8_neon_x4.o\
 	sha256_armv8_neon_x1.o

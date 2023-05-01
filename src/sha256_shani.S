@@ -475,144 +475,144 @@ sha256_shani:
 	paddd           STATE0b, [rip + .LDIGEST]
 	paddd		STATE1b, [rip + .LDIGEST + 16]
 
-        # Rounds with PADDING
-        
-	# Save hash values for addition after rounds
-	movdqa		[rsp + _DIGEST + 0*16], STATE0
-	movdqa		[rsp + _DIGEST + 1*16], STATE1
-	movdqa		[rsp + _DIGEST + 2*16], STATE0b
-	movdqa		[rsp + _DIGEST + 3*16], STATE1b
-
-	# Rounds 0-3
-	movdqa		MSG, [SHA256PADDING + 0*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-	# Rounds 4-7
-	movdqa		MSG, [SHA256PADDING + 1*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-
-	movdqa		MSG, [SHA256PADDING + 2*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-
-	movdqa		MSG, [SHA256PADDING + 3*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-
-	movdqa		MSG, [SHA256PADDING + 4*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-
-	movdqa		MSG, [SHA256PADDING + 5*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-
-	movdqa		MSG, [SHA256PADDING + 6*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-
-	movdqa		MSG, [SHA256PADDING + 7*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-
-	movdqa		MSG, [SHA256PADDING + 8*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-
-	movdqa		MSG, [SHA256PADDING + 9*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-	movdqa		MSG, [SHA256PADDING + 10*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-
-	movdqa		MSG, [SHA256PADDING + 11*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-
-	movdqa		MSG, [SHA256PADDING + 12*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-
-	movdqa		MSG, [SHA256PADDING + 13*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-	movdqa		MSG, [SHA256PADDING + 14*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-
-	movdqa		MSG, [SHA256PADDING + 15*16]
-		sha256rnds2	STATE1, STATE0
-		sha256rnds2	STATE1b, STATE0b
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-		sha256rnds2	STATE0b, STATE1b
-
-	paddd		STATE0, [rsp + _DIGEST + 0*16]
-	paddd		STATE1, [rsp + _DIGEST + 1*16]
-	paddd           STATE0b, [rsp + _DIGEST + 2*16]
-	paddd		STATE1b, [rsp + _DIGEST + 3*16]
+//         # Rounds with PADDING
+//         
+// 	# Save hash values for addition after rounds
+// 	movdqa		[rsp + _DIGEST + 0*16], STATE0
+// 	movdqa		[rsp + _DIGEST + 1*16], STATE1
+// 	movdqa		[rsp + _DIGEST + 2*16], STATE0b
+// 	movdqa		[rsp + _DIGEST + 3*16], STATE1b
+// 
+// 	# Rounds 0-3
+// 	movdqa		MSG, [SHA256PADDING + 0*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 	# Rounds 4-7
+// 	movdqa		MSG, [SHA256PADDING + 1*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 
+// 	movdqa		MSG, [SHA256PADDING + 2*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 
+// 	movdqa		MSG, [SHA256PADDING + 3*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 
+// 	movdqa		MSG, [SHA256PADDING + 4*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 
+// 	movdqa		MSG, [SHA256PADDING + 5*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 
+// 	movdqa		MSG, [SHA256PADDING + 6*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 
+// 	movdqa		MSG, [SHA256PADDING + 7*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 
+// 	movdqa		MSG, [SHA256PADDING + 8*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 
+// 	movdqa		MSG, [SHA256PADDING + 9*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 	movdqa		MSG, [SHA256PADDING + 10*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 
+// 	movdqa		MSG, [SHA256PADDING + 11*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 
+// 	movdqa		MSG, [SHA256PADDING + 12*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 
+// 	movdqa		MSG, [SHA256PADDING + 13*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 	movdqa		MSG, [SHA256PADDING + 14*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 
+// 	movdqa		MSG, [SHA256PADDING + 15*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		sha256rnds2	STATE1b, STATE0b
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 		sha256rnds2	STATE0b, STATE1b
+// 
+// 	paddd		STATE0, [rsp + _DIGEST + 0*16]
+// 	paddd		STATE1, [rsp + _DIGEST + 1*16]
+// 	paddd           STATE0b, [rsp + _DIGEST + 2*16]
+// 	paddd		STATE1b, [rsp + _DIGEST + 3*16]
 
 
 	# Write hash values back in the correct order
@@ -841,110 +841,110 @@ sha256_shani:
 	paddd		STATE0, ABEF_SAVE
 	paddd		STATE1, CDGH_SAVE
 
-        # Rounds with PADDING
-	# Save hash values for addition after rounds
-	movdqa		ABEF_SAVE, STATE0
-	movdqa		CDGH_SAVE, STATE1
-
-	# Rounds 0-3
-	movdqa		MSG, [SHA256PADDING + 0*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 4-7
-	movdqa		MSG, [SHA256PADDING + 1*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 8-11
-	movdqa		MSG, [SHA256PADDING + 2*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 12-15
-	movdqa		MSG, [SHA256PADDING + 3*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 16-19
-	movdqa		MSG, [SHA256PADDING + 4*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 20-23
-	movdqa		MSG, [SHA256PADDING + 5*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 24-27
-	movdqa		MSG, [SHA256PADDING + 6*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 28-31
-	movdqa		MSG, [SHA256PADDING + 7*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 32-35
-	movdqa		MSG, [SHA256PADDING + 8*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 36-39
-	movdqa		MSG, [SHA256PADDING + 9*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 40-43
-	movdqa		MSG, [SHA256PADDING + 10*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 44-47
-	movdqa		MSG, [SHA256PADDING + 11*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 48-51
-	movdqa		MSG, [SHA256PADDING + 12*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 52-55
-	movdqa		MSG, [SHA256PADDING + 13*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 56-59
-	movdqa		MSG, [SHA256PADDING + 14*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Rounds 60-63
-	movdqa		MSG, [SHA256PADDING + 15*16]
-		sha256rnds2	STATE1, STATE0
-		pshufd 		MSG, MSG, 0x0E
-		sha256rnds2	STATE0, STATE1
-
-	# Add current hash values with previously saved
-	paddd		STATE0, ABEF_SAVE
-	paddd		STATE1, CDGH_SAVE
+//         # Rounds with PADDING
+// 	# Save hash values for addition after rounds
+// 	movdqa		ABEF_SAVE, STATE0
+// 	movdqa		CDGH_SAVE, STATE1
+// 
+// 	# Rounds 0-3
+// 	movdqa		MSG, [SHA256PADDING + 0*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 4-7
+// 	movdqa		MSG, [SHA256PADDING + 1*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 8-11
+// 	movdqa		MSG, [SHA256PADDING + 2*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 12-15
+// 	movdqa		MSG, [SHA256PADDING + 3*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 16-19
+// 	movdqa		MSG, [SHA256PADDING + 4*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 20-23
+// 	movdqa		MSG, [SHA256PADDING + 5*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 24-27
+// 	movdqa		MSG, [SHA256PADDING + 6*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 28-31
+// 	movdqa		MSG, [SHA256PADDING + 7*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 32-35
+// 	movdqa		MSG, [SHA256PADDING + 8*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 36-39
+// 	movdqa		MSG, [SHA256PADDING + 9*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 40-43
+// 	movdqa		MSG, [SHA256PADDING + 10*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 44-47
+// 	movdqa		MSG, [SHA256PADDING + 11*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 48-51
+// 	movdqa		MSG, [SHA256PADDING + 12*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 52-55
+// 	movdqa		MSG, [SHA256PADDING + 13*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 56-59
+// 	movdqa		MSG, [SHA256PADDING + 14*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Rounds 60-63
+// 	movdqa		MSG, [SHA256PADDING + 15*16]
+// 		sha256rnds2	STATE1, STATE0
+// 		pshufd 		MSG, MSG, 0x0E
+// 		sha256rnds2	STATE0, STATE1
+// 
+// 	# Add current hash values with previously saved
+// 	paddd		STATE0, ABEF_SAVE
+// 	paddd		STATE1, CDGH_SAVE
 
 	# Write hash values back in the correct order
 	pshufd		STATE0,  STATE0,  0x1B	// FEBA

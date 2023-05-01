@@ -693,34 +693,34 @@ sha256_8_avx2:
 	# rounds with padding
 
 	# save old digest
-	vmovdqa	[rsp + _DIGEST + 0*SZ8], a
-	vmovdqa	[rsp + _DIGEST + 1*SZ8], b
-	vmovdqa	[rsp + _DIGEST + 2*SZ8], c
-	vmovdqa	[rsp + _DIGEST + 3*SZ8], d
-	vmovdqa	[rsp + _DIGEST + 4*SZ8], e
-	vmovdqa	[rsp + _DIGEST + 5*SZ8], f
-	vmovdqa	[rsp + _DIGEST + 6*SZ8], g
-	vmovdqa	[rsp + _DIGEST + 7*SZ8], h
-
-
-	lea TBL,[rip + .LPADDING_8]
-
-.set .Lpadding, 1
-.set .Li, 0
-.align 16
-.rept 64
-	ROUND_00_15 	TT0,  .Li, 32*.Li
-.set .Li, (.Li + 1)
-.endr
-	# add old digest
-	vpaddd	a, a, [rsp + _DIGEST + 0*SZ8]
-	vpaddd	b, b, [rsp + _DIGEST + 1*SZ8]
-	vpaddd	c, c, [rsp + _DIGEST + 2*SZ8]
-	vpaddd	d, d, [rsp + _DIGEST + 3*SZ8]
-	vpaddd	e, e, [rsp + _DIGEST + 4*SZ8]
-	vpaddd	f, f, [rsp + _DIGEST + 5*SZ8]
-	vpaddd	g, g, [rsp + _DIGEST + 6*SZ8]
-	vpaddd	h, h, [rsp + _DIGEST + 7*SZ8]
+//	vmovdqa	[rsp + _DIGEST + 0*SZ8], a
+//	vmovdqa	[rsp + _DIGEST + 1*SZ8], b
+//	vmovdqa	[rsp + _DIGEST + 2*SZ8], c
+//	vmovdqa	[rsp + _DIGEST + 3*SZ8], d
+//	vmovdqa	[rsp + _DIGEST + 4*SZ8], e
+//	vmovdqa	[rsp + _DIGEST + 5*SZ8], f
+//	vmovdqa	[rsp + _DIGEST + 6*SZ8], g
+//	vmovdqa	[rsp + _DIGEST + 7*SZ8], h
+//
+//
+//	lea TBL,[rip + .LPADDING_8]
+//
+//.set .Lpadding, 1
+//.set .Li, 0
+//.align 16
+//.rept 64
+//	ROUND_00_15 	TT0,  .Li, 32*.Li
+//.set .Li, (.Li + 1)
+//.endr
+//	# add old digest
+//	vpaddd	a, a, [rsp + _DIGEST + 0*SZ8]
+//	vpaddd	b, b, [rsp + _DIGEST + 1*SZ8]
+//	vpaddd	c, c, [rsp + _DIGEST + 2*SZ8]
+//	vpaddd	d, d, [rsp + _DIGEST + 3*SZ8]
+//	vpaddd	e, e, [rsp + _DIGEST + 4*SZ8]
+//	vpaddd	f, f, [rsp + _DIGEST + 5*SZ8]
+//	vpaddd	g, g, [rsp + _DIGEST + 6*SZ8]
+//	vpaddd	h, h, [rsp + _DIGEST + 7*SZ8]
 
 
 	# transpose the digest and convert to little endian to get the registers correctly

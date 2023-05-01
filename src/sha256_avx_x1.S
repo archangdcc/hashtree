@@ -520,34 +520,34 @@ sha256_1_avx:
 
         // rounds with padding
         
-        // save old digest
-        //
-        mov    [rsp + _DIGEST + 0*4], a_
-        mov    [rsp + _DIGEST + 1*4], b_
-        mov    [rsp + _DIGEST + 2*4], c_
-        mov    [rsp + _DIGEST + 3*4], d_
-        mov    [rsp + _DIGEST + 4*4], e_
-        mov    [rsp + _DIGEST + 5*4], f_
-        mov    [rsp + _DIGEST + 6*4], g_
-        mov    [rsp + _DIGEST + 7*4], h_
-       
-        lea     TBL,[rip + .LPADDING]
-       
-.set .Li, 0
-.rept 64
-                    DO_ROUND TBL, .Li
-	            .set .Li, .Li+4
-.endr
-
-        //; add the previous digest
-        add   a_, [rsp + _DIGEST + 0*4]
-        add   b_, [rsp + _DIGEST + 1*4]
-        add   c_, [rsp + _DIGEST + 2*4]
-        add   d_, [rsp + _DIGEST + 3*4]
-        add   e_, [rsp + _DIGEST + 4*4]
-        add   f_, [rsp + _DIGEST + 5*4]
-        add   g_, [rsp + _DIGEST + 6*4]
-        add   h_, [rsp + _DIGEST + 7*4]
+//         // save old digest
+//         //
+//         mov    [rsp + _DIGEST + 0*4], a_
+//         mov    [rsp + _DIGEST + 1*4], b_
+//         mov    [rsp + _DIGEST + 2*4], c_
+//         mov    [rsp + _DIGEST + 3*4], d_
+//         mov    [rsp + _DIGEST + 4*4], e_
+//         mov    [rsp + _DIGEST + 5*4], f_
+//         mov    [rsp + _DIGEST + 6*4], g_
+//         mov    [rsp + _DIGEST + 7*4], h_
+//        
+//         lea     TBL,[rip + .LPADDING]
+//        
+// .set .Li, 0
+// .rept 64
+//                     DO_ROUND TBL, .Li
+// 	            .set .Li, .Li+4
+// .endr
+// 
+//         //; add the previous digest
+//         add   a_, [rsp + _DIGEST + 0*4]
+//         add   b_, [rsp + _DIGEST + 1*4]
+//         add   c_, [rsp + _DIGEST + 2*4]
+//         add   d_, [rsp + _DIGEST + 3*4]
+//         add   e_, [rsp + _DIGEST + 4*4]
+//         add   f_, [rsp + _DIGEST + 5*4]
+//         add   g_, [rsp + _DIGEST + 6*4]
+//         add   h_, [rsp + _DIGEST + 7*4]
 
         //; shuffle the bytes to little endian
         bswap  a_

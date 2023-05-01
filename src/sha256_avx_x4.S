@@ -429,39 +429,39 @@ sha256_4_avx:
 	vpaddd	g, g, [TBL + 6*SZ4]
 	vpaddd	h, h, [TBL + 7*SZ4]
 
-        // rounds with padding
-        
-        // save old digest
-        
-	vmovdqa	[rsp + _DIGEST + 0*SZ4], a
-	vmovdqa	[rsp + _DIGEST + 1*SZ4], b
-	vmovdqa	[rsp + _DIGEST + 2*SZ4], c
-	vmovdqa	[rsp + _DIGEST + 3*SZ4], d
-	vmovdqa	[rsp + _DIGEST + 4*SZ4], e
-	vmovdqa	[rsp + _DIGEST + 5*SZ4], f
-	vmovdqa	[rsp + _DIGEST + 6*SZ4], g
-	vmovdqa	[rsp + _DIGEST + 7*SZ4], h
-
-        lea   TBL, [rip + .LPADDING_4]
-        xor   ROUND,ROUND
-        jmp   .Lrounds_padding
-
-.align 16
-.Lrounds_padding:
-.set .Lpadding, 1
-.rept 64
-                    ROUND_00_15 T1, 0
-.endr 
-
-	// add old digest
-	vpaddd	a, a, [rsp + _DIGEST + 0*SZ4]
-	vpaddd	b, b, [rsp + _DIGEST + 1*SZ4]
-	vpaddd	c, c, [rsp + _DIGEST + 2*SZ4]
-	vpaddd	d, d, [rsp + _DIGEST + 3*SZ4]
-	vpaddd	e, e, [rsp + _DIGEST + 4*SZ4]
-	vpaddd	f, f, [rsp + _DIGEST + 5*SZ4]
-	vpaddd	g, g, [rsp + _DIGEST + 6*SZ4]
-	vpaddd	h, h, [rsp + _DIGEST + 7*SZ4]
+//         // rounds with padding
+//         
+//         // save old digest
+//         
+// 	vmovdqa	[rsp + _DIGEST + 0*SZ4], a
+// 	vmovdqa	[rsp + _DIGEST + 1*SZ4], b
+// 	vmovdqa	[rsp + _DIGEST + 2*SZ4], c
+// 	vmovdqa	[rsp + _DIGEST + 3*SZ4], d
+// 	vmovdqa	[rsp + _DIGEST + 4*SZ4], e
+// 	vmovdqa	[rsp + _DIGEST + 5*SZ4], f
+// 	vmovdqa	[rsp + _DIGEST + 6*SZ4], g
+// 	vmovdqa	[rsp + _DIGEST + 7*SZ4], h
+// 
+//         lea   TBL, [rip + .LPADDING_4]
+//         xor   ROUND,ROUND
+//         jmp   .Lrounds_padding
+// 
+// .align 16
+// .Lrounds_padding:
+// .set .Lpadding, 1
+// .rept 64
+//                     ROUND_00_15 T1, 0
+// .endr 
+// 
+// 	// add old digest
+// 	vpaddd	a, a, [rsp + _DIGEST + 0*SZ4]
+// 	vpaddd	b, b, [rsp + _DIGEST + 1*SZ4]
+// 	vpaddd	c, c, [rsp + _DIGEST + 2*SZ4]
+// 	vpaddd	d, d, [rsp + _DIGEST + 3*SZ4]
+// 	vpaddd	e, e, [rsp + _DIGEST + 4*SZ4]
+// 	vpaddd	f, f, [rsp + _DIGEST + 5*SZ4]
+// 	vpaddd	g, g, [rsp + _DIGEST + 6*SZ4]
+// 	vpaddd	h, h, [rsp + _DIGEST + 7*SZ4]
 
 	// transpose the digest and convert to little endian to get the registers correctly
 
