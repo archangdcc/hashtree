@@ -44,6 +44,7 @@ objx86 = sha256_shani.o\
 	sha256_avx_x4.o\
 	sha256_avx_x1.o\
 	sha256_sse_x1.o\
+	hashtree.o\
 
 .PHONY : clean
 
