@@ -43,15 +43,20 @@ Copied parts are
      #define arg2	rsi
      #define arg3	rdx
      #define arg4	rcx
-     #define arg5       r8
+     #define arg5   r8
 #endif
 
 #define OUTPUT_PTR	arg1
 #define DATA_PTR	arg2
 #define COUNT		arg3
-#define TBL		arg4
-#define PADDING		arg5
+#define N_BLK		arg4
+#define TBL		arg5
 #define DIGEST		r11
+
+// TODO XXX support windows
+#define OFFSET      r9
+#define OFFSET8     rax
+#define BLK_CTR     r10
 
 .equ A,	zmm0
 .equ B,	zmm1
@@ -363,6 +368,21 @@ Copied parts are
 						//      Wt-7 + sigma0(Wt-15) +
 .endm
 
+.macro MSG_SCHED_ROUND_00_15_L
+    vmovups         YW0,    [DATA_PTR + OFFSET]
+    vinserti64x4    W0, W0, [DATA_PTR + OFFSET8], 0x01
+    add             OFFSET, N_BLK
+    add             OFFSET8, N_BLK
+.endm
+
+.macro MSG_SCHED_ROUND_00_15_H
+    vmovups         YW0,    [DATA_PTR + OFFSET + 32]
+    vinserti64x4    W0, W0, [DATA_PTR + OFFSET8 + 32], 0x01
+    add             OFFSET, N_BLK
+    add             OFFSET8, N_BLK
+.endm
+
+
 .section .rodata
 .align 64
 
@@ -630,264 +650,6 @@ Copied parts are
 	 .quad 0x0405060700010203, 0x0c0d0e0f08090a0b
 	 .quad 0x0405060700010203, 0x0c0d0e0f08090a0b
 
-.LPADDING_16:
-	.octa     0xc28a2f98c28a2f98c28a2f98c28a2f98
-	.octa     0xc28a2f98c28a2f98c28a2f98c28a2f98
-	.octa     0xc28a2f98c28a2f98c28a2f98c28a2f98
-	.octa     0xc28a2f98c28a2f98c28a2f98c28a2f98
-	.octa 	  0x71374491713744917137449171374491
-	.octa 	  0x71374491713744917137449171374491
-	.octa 	  0x71374491713744917137449171374491
-	.octa 	  0x71374491713744917137449171374491
-	.octa 	  0xb5c0fbcfb5c0fbcfb5c0fbcfb5c0fbcf
-	.octa 	  0xb5c0fbcfb5c0fbcfb5c0fbcfb5c0fbcf
-	.octa 	  0xb5c0fbcfb5c0fbcfb5c0fbcfb5c0fbcf
-	.octa 	  0xb5c0fbcfb5c0fbcfb5c0fbcfb5c0fbcf
-	.octa 	  0xe9b5dba5e9b5dba5e9b5dba5e9b5dba5
-	.octa 	  0xe9b5dba5e9b5dba5e9b5dba5e9b5dba5
-	.octa 	  0xe9b5dba5e9b5dba5e9b5dba5e9b5dba5
-	.octa 	  0xe9b5dba5e9b5dba5e9b5dba5e9b5dba5
-        .octa     0x3956c25b3956c25b3956c25b3956c25b
-        .octa     0x3956c25b3956c25b3956c25b3956c25b
-        .octa     0x3956c25b3956c25b3956c25b3956c25b
-        .octa     0x3956c25b3956c25b3956c25b3956c25b
-        .octa     0x59f111f159f111f159f111f159f111f1
-        .octa     0x59f111f159f111f159f111f159f111f1
-        .octa     0x59f111f159f111f159f111f159f111f1
-        .octa     0x59f111f159f111f159f111f159f111f1
-        .octa     0x923f82a4923f82a4923f82a4923f82a4
-        .octa     0x923f82a4923f82a4923f82a4923f82a4
-        .octa     0x923f82a4923f82a4923f82a4923f82a4
-        .octa     0x923f82a4923f82a4923f82a4923f82a4
-        .octa     0xab1c5ed5ab1c5ed5ab1c5ed5ab1c5ed5
-        .octa     0xab1c5ed5ab1c5ed5ab1c5ed5ab1c5ed5
-        .octa     0xab1c5ed5ab1c5ed5ab1c5ed5ab1c5ed5
-        .octa     0xab1c5ed5ab1c5ed5ab1c5ed5ab1c5ed5
-        .octa     0xd807aa98d807aa98d807aa98d807aa98
-        .octa     0xd807aa98d807aa98d807aa98d807aa98
-        .octa     0xd807aa98d807aa98d807aa98d807aa98
-        .octa     0xd807aa98d807aa98d807aa98d807aa98
-        .octa     0x12835b0112835b0112835b0112835b01
-        .octa     0x12835b0112835b0112835b0112835b01
-        .octa     0x12835b0112835b0112835b0112835b01
-        .octa     0x12835b0112835b0112835b0112835b01
-        .octa     0x243185be243185be243185be243185be
-        .octa     0x243185be243185be243185be243185be
-        .octa     0x243185be243185be243185be243185be
-        .octa     0x243185be243185be243185be243185be
-        .octa     0x550c7dc3550c7dc3550c7dc3550c7dc3
-        .octa     0x550c7dc3550c7dc3550c7dc3550c7dc3
-        .octa     0x550c7dc3550c7dc3550c7dc3550c7dc3
-        .octa     0x550c7dc3550c7dc3550c7dc3550c7dc3
-        .octa     0x72be5d7472be5d7472be5d7472be5d74
-        .octa     0x72be5d7472be5d7472be5d7472be5d74
-        .octa     0x72be5d7472be5d7472be5d7472be5d74
-        .octa     0x72be5d7472be5d7472be5d7472be5d74
-        .octa     0x80deb1fe80deb1fe80deb1fe80deb1fe
-        .octa     0x80deb1fe80deb1fe80deb1fe80deb1fe
-        .octa     0x80deb1fe80deb1fe80deb1fe80deb1fe
-        .octa     0x80deb1fe80deb1fe80deb1fe80deb1fe
-        .octa     0x9bdc06a79bdc06a79bdc06a79bdc06a7
-        .octa     0x9bdc06a79bdc06a79bdc06a79bdc06a7
-        .octa     0x9bdc06a79bdc06a79bdc06a79bdc06a7
-        .octa     0x9bdc06a79bdc06a79bdc06a79bdc06a7
-        .octa     0xc19bf374c19bf374c19bf374c19bf374
-        .octa     0xc19bf374c19bf374c19bf374c19bf374
-        .octa     0xc19bf374c19bf374c19bf374c19bf374
-        .octa     0xc19bf374c19bf374c19bf374c19bf374
-        .octa     0x649b69c1649b69c1649b69c1649b69c1
-        .octa     0x649b69c1649b69c1649b69c1649b69c1
-        .octa     0x649b69c1649b69c1649b69c1649b69c1
-        .octa     0x649b69c1649b69c1649b69c1649b69c1
-        .octa     0xf0fe4786f0fe4786f0fe4786f0fe4786
-        .octa     0xf0fe4786f0fe4786f0fe4786f0fe4786
-        .octa     0xf0fe4786f0fe4786f0fe4786f0fe4786
-        .octa     0xf0fe4786f0fe4786f0fe4786f0fe4786
-        .octa     0x0fe1edc60fe1edc60fe1edc60fe1edc6
-        .octa     0x0fe1edc60fe1edc60fe1edc60fe1edc6
-        .octa     0x0fe1edc60fe1edc60fe1edc60fe1edc6
-        .octa     0x0fe1edc60fe1edc60fe1edc60fe1edc6
-        .octa     0x240cf254240cf254240cf254240cf254
-        .octa     0x240cf254240cf254240cf254240cf254
-        .octa     0x240cf254240cf254240cf254240cf254
-        .octa     0x240cf254240cf254240cf254240cf254
-        .octa     0x4fe9346f4fe9346f4fe9346f4fe9346f
-        .octa     0x4fe9346f4fe9346f4fe9346f4fe9346f
-        .octa     0x4fe9346f4fe9346f4fe9346f4fe9346f
-        .octa     0x4fe9346f4fe9346f4fe9346f4fe9346f
-        .octa     0x6cc984be6cc984be6cc984be6cc984be
-        .octa     0x6cc984be6cc984be6cc984be6cc984be
-        .octa     0x6cc984be6cc984be6cc984be6cc984be
-        .octa     0x6cc984be6cc984be6cc984be6cc984be
-        .octa     0x61b9411e61b9411e61b9411e61b9411e
-        .octa     0x61b9411e61b9411e61b9411e61b9411e
-        .octa     0x61b9411e61b9411e61b9411e61b9411e
-        .octa     0x61b9411e61b9411e61b9411e61b9411e
-        .octa     0x16f988fa16f988fa16f988fa16f988fa
-        .octa     0x16f988fa16f988fa16f988fa16f988fa
-        .octa     0x16f988fa16f988fa16f988fa16f988fa
-        .octa     0x16f988fa16f988fa16f988fa16f988fa
-        .octa     0xf2c65152f2c65152f2c65152f2c65152
-        .octa     0xf2c65152f2c65152f2c65152f2c65152
-        .octa     0xf2c65152f2c65152f2c65152f2c65152
-        .octa     0xf2c65152f2c65152f2c65152f2c65152
-        .octa     0xa88e5a6da88e5a6da88e5a6da88e5a6d
-        .octa     0xa88e5a6da88e5a6da88e5a6da88e5a6d
-        .octa     0xa88e5a6da88e5a6da88e5a6da88e5a6d
-        .octa     0xa88e5a6da88e5a6da88e5a6da88e5a6d
-        .octa     0xb019fc65b019fc65b019fc65b019fc65
-        .octa     0xb019fc65b019fc65b019fc65b019fc65
-        .octa     0xb019fc65b019fc65b019fc65b019fc65
-        .octa     0xb019fc65b019fc65b019fc65b019fc65
-        .octa     0xb9d99ec7b9d99ec7b9d99ec7b9d99ec7
-        .octa     0xb9d99ec7b9d99ec7b9d99ec7b9d99ec7
-        .octa     0xb9d99ec7b9d99ec7b9d99ec7b9d99ec7
-        .octa     0xb9d99ec7b9d99ec7b9d99ec7b9d99ec7
-        .octa     0x9a1231c39a1231c39a1231c39a1231c3
-        .octa     0x9a1231c39a1231c39a1231c39a1231c3
-        .octa     0x9a1231c39a1231c39a1231c39a1231c3
-        .octa     0x9a1231c39a1231c39a1231c39a1231c3
-        .octa     0xe70eeaa0e70eeaa0e70eeaa0e70eeaa0
-        .octa     0xe70eeaa0e70eeaa0e70eeaa0e70eeaa0
-        .octa     0xe70eeaa0e70eeaa0e70eeaa0e70eeaa0
-        .octa     0xe70eeaa0e70eeaa0e70eeaa0e70eeaa0
-        .octa     0xfdb1232bfdb1232bfdb1232bfdb1232b
-        .octa     0xfdb1232bfdb1232bfdb1232bfdb1232b
-        .octa     0xfdb1232bfdb1232bfdb1232bfdb1232b
-        .octa     0xfdb1232bfdb1232bfdb1232bfdb1232b
-        .octa     0xc7353eb0c7353eb0c7353eb0c7353eb0
-        .octa     0xc7353eb0c7353eb0c7353eb0c7353eb0
-        .octa     0xc7353eb0c7353eb0c7353eb0c7353eb0
-        .octa     0xc7353eb0c7353eb0c7353eb0c7353eb0
-        .octa     0x3069bad53069bad53069bad53069bad5
-        .octa     0x3069bad53069bad53069bad53069bad5
-        .octa     0x3069bad53069bad53069bad53069bad5
-        .octa     0x3069bad53069bad53069bad53069bad5
-        .octa     0xcb976d5fcb976d5fcb976d5fcb976d5f
-        .octa     0xcb976d5fcb976d5fcb976d5fcb976d5f
-        .octa     0xcb976d5fcb976d5fcb976d5fcb976d5f
-        .octa     0xcb976d5fcb976d5fcb976d5fcb976d5f
-        .octa     0x5a0f118f5a0f118f5a0f118f5a0f118f
-        .octa     0x5a0f118f5a0f118f5a0f118f5a0f118f
-        .octa     0x5a0f118f5a0f118f5a0f118f5a0f118f
-        .octa     0x5a0f118f5a0f118f5a0f118f5a0f118f
-        .octa     0xdc1eeefddc1eeefddc1eeefddc1eeefd
-        .octa     0xdc1eeefddc1eeefddc1eeefddc1eeefd
-        .octa     0xdc1eeefddc1eeefddc1eeefddc1eeefd
-        .octa     0xdc1eeefddc1eeefddc1eeefddc1eeefd
-        .octa     0x0a35b6890a35b6890a35b6890a35b689
-        .octa     0x0a35b6890a35b6890a35b6890a35b689
-        .octa     0x0a35b6890a35b6890a35b6890a35b689
-        .octa     0x0a35b6890a35b6890a35b6890a35b689
-        .octa     0xde0b7a04de0b7a04de0b7a04de0b7a04
-        .octa     0xde0b7a04de0b7a04de0b7a04de0b7a04
-        .octa     0xde0b7a04de0b7a04de0b7a04de0b7a04
-        .octa     0xde0b7a04de0b7a04de0b7a04de0b7a04
-        .octa     0x58f4ca9d58f4ca9d58f4ca9d58f4ca9d
-        .octa     0x58f4ca9d58f4ca9d58f4ca9d58f4ca9d
-        .octa     0x58f4ca9d58f4ca9d58f4ca9d58f4ca9d
-        .octa     0x58f4ca9d58f4ca9d58f4ca9d58f4ca9d
-        .octa     0xe15d5b16e15d5b16e15d5b16e15d5b16
-        .octa     0xe15d5b16e15d5b16e15d5b16e15d5b16
-        .octa     0xe15d5b16e15d5b16e15d5b16e15d5b16
-        .octa     0xe15d5b16e15d5b16e15d5b16e15d5b16
-        .octa     0x007f3e86007f3e86007f3e86007f3e86
-        .octa     0x007f3e86007f3e86007f3e86007f3e86
-        .octa     0x007f3e86007f3e86007f3e86007f3e86
-        .octa     0x007f3e86007f3e86007f3e86007f3e86
-        .octa     0x37088980370889803708898037088980
-        .octa     0x37088980370889803708898037088980
-        .octa     0x37088980370889803708898037088980
-        .octa     0x37088980370889803708898037088980
-        .octa     0xa507ea32a507ea32a507ea32a507ea32
-        .octa     0xa507ea32a507ea32a507ea32a507ea32
-        .octa     0xa507ea32a507ea32a507ea32a507ea32
-        .octa     0xa507ea32a507ea32a507ea32a507ea32
-        .octa     0x6fab95376fab95376fab95376fab9537
-        .octa     0x6fab95376fab95376fab95376fab9537
-        .octa     0x6fab95376fab95376fab95376fab9537
-        .octa     0x6fab95376fab95376fab95376fab9537
-        .octa     0x17406110174061101740611017406110
-        .octa     0x17406110174061101740611017406110
-        .octa     0x17406110174061101740611017406110
-        .octa     0x17406110174061101740611017406110
-        .octa     0x0d8cd6f10d8cd6f10d8cd6f10d8cd6f1
-        .octa     0x0d8cd6f10d8cd6f10d8cd6f10d8cd6f1
-        .octa     0x0d8cd6f10d8cd6f10d8cd6f10d8cd6f1
-        .octa     0x0d8cd6f10d8cd6f10d8cd6f10d8cd6f1
-        .octa     0xcdaa3b6dcdaa3b6dcdaa3b6dcdaa3b6d
-        .octa     0xcdaa3b6dcdaa3b6dcdaa3b6dcdaa3b6d
-        .octa     0xcdaa3b6dcdaa3b6dcdaa3b6dcdaa3b6d
-        .octa     0xcdaa3b6dcdaa3b6dcdaa3b6dcdaa3b6d
-        .octa     0xc0bbbe37c0bbbe37c0bbbe37c0bbbe37
-        .octa     0xc0bbbe37c0bbbe37c0bbbe37c0bbbe37
-        .octa     0xc0bbbe37c0bbbe37c0bbbe37c0bbbe37
-        .octa     0xc0bbbe37c0bbbe37c0bbbe37c0bbbe37
-        .octa     0x83613bda83613bda83613bda83613bda
-        .octa     0x83613bda83613bda83613bda83613bda
-        .octa     0x83613bda83613bda83613bda83613bda
-        .octa     0x83613bda83613bda83613bda83613bda
-        .octa     0xdb48a363db48a363db48a363db48a363
-        .octa     0xdb48a363db48a363db48a363db48a363
-        .octa     0xdb48a363db48a363db48a363db48a363
-        .octa     0xdb48a363db48a363db48a363db48a363
-        .octa     0x0b02e9310b02e9310b02e9310b02e931
-        .octa     0x0b02e9310b02e9310b02e9310b02e931
-        .octa     0x0b02e9310b02e9310b02e9310b02e931
-        .octa     0x0b02e9310b02e9310b02e9310b02e931
-        .octa     0x6fd15ca76fd15ca76fd15ca76fd15ca7
-        .octa     0x6fd15ca76fd15ca76fd15ca76fd15ca7
-        .octa     0x6fd15ca76fd15ca76fd15ca76fd15ca7
-        .octa     0x6fd15ca76fd15ca76fd15ca76fd15ca7
-        .octa     0x521afaca521afaca521afaca521afaca
-        .octa     0x521afaca521afaca521afaca521afaca
-        .octa     0x521afaca521afaca521afaca521afaca
-        .octa     0x521afaca521afaca521afaca521afaca
-        .octa     0x31338431313384313133843131338431
-        .octa     0x31338431313384313133843131338431
-        .octa     0x31338431313384313133843131338431
-        .octa     0x31338431313384313133843131338431
-        .octa     0x6ed41a956ed41a956ed41a956ed41a95
-        .octa     0x6ed41a956ed41a956ed41a956ed41a95
-        .octa     0x6ed41a956ed41a956ed41a956ed41a95
-        .octa     0x6ed41a956ed41a956ed41a956ed41a95
-        .octa     0x6d4378906d4378906d4378906d437890
-        .octa     0x6d4378906d4378906d4378906d437890
-        .octa     0x6d4378906d4378906d4378906d437890
-        .octa     0x6d4378906d4378906d4378906d437890
-        .octa     0xc39c91f2c39c91f2c39c91f2c39c91f2
-        .octa     0xc39c91f2c39c91f2c39c91f2c39c91f2
-        .octa     0xc39c91f2c39c91f2c39c91f2c39c91f2
-        .octa     0xc39c91f2c39c91f2c39c91f2c39c91f2
-        .octa     0x9eccabbd9eccabbd9eccabbd9eccabbd
-        .octa     0x9eccabbd9eccabbd9eccabbd9eccabbd
-        .octa     0x9eccabbd9eccabbd9eccabbd9eccabbd
-        .octa     0x9eccabbd9eccabbd9eccabbd9eccabbd
-        .octa     0xb5c9a0e6b5c9a0e6b5c9a0e6b5c9a0e6
-        .octa     0xb5c9a0e6b5c9a0e6b5c9a0e6b5c9a0e6
-        .octa     0xb5c9a0e6b5c9a0e6b5c9a0e6b5c9a0e6
-        .octa     0xb5c9a0e6b5c9a0e6b5c9a0e6b5c9a0e6
-        .octa     0x532fb63c532fb63c532fb63c532fb63c
-        .octa     0x532fb63c532fb63c532fb63c532fb63c
-        .octa     0x532fb63c532fb63c532fb63c532fb63c
-        .octa     0x532fb63c532fb63c532fb63c532fb63c
-        .octa     0xd2c741c6d2c741c6d2c741c6d2c741c6
-        .octa     0xd2c741c6d2c741c6d2c741c6d2c741c6
-        .octa     0xd2c741c6d2c741c6d2c741c6d2c741c6
-        .octa     0xd2c741c6d2c741c6d2c741c6d2c741c6
-        .octa     0x07237ea307237ea307237ea307237ea3
-        .octa     0x07237ea307237ea307237ea307237ea3
-        .octa     0x07237ea307237ea307237ea307237ea3
-        .octa     0x07237ea307237ea307237ea307237ea3
-        .octa     0xa4954b68a4954b68a4954b68a4954b68
-        .octa     0xa4954b68a4954b68a4954b68a4954b68
-        .octa     0xa4954b68a4954b68a4954b68a4954b68
-        .octa     0xa4954b68a4954b68a4954b68a4954b68
-        .octa     0x4c191d764c191d764c191d764c191d76
-        .octa     0x4c191d764c191d764c191d764c191d76
-        .octa     0x4c191d764c191d764c191d764c191d76
-        .octa     0x4c191d764c191d764c191d764c191d76
-
 .LDIGEST_16:
         .long   0x6a09e667, 0x6a09e667, 0x6a09e667, 0x6a09e667
         .long   0x6a09e667, 0x6a09e667, 0x6a09e667, 0x6a09e667
@@ -955,26 +717,31 @@ Copied parts are
 	.long	0x0000000d, 0x0000000f, 0x0000001d, 0x0000001f
 
 .text
-.global sha256_16_avx512
+.global sha256_multiblk_16_avx512
 #ifndef __WIN64__
-.type sha256_16_avx512,%function
+.type sha256_multiblk_16_avx512,%function
 #endif
 .align 64
-sha256_16_avx512:
+sha256_multiblk_16_avx512:
         endbr64
         cmp     COUNT, 0
         jne     .Lstart_routine
         ret
 
 .Lstart_routine:
+    mov     rax, rsp
+    sub     rsp, 8*64+8
+    and     rsp, ~63
+    mov     [rsp + 8*64], rax
+
 	lea	DIGEST,	[rip + .LDIGEST_16]
 	lea	TBL, [rip + .LK256_16]
 
-.Lsha256_16_avx512loop:
+.Lsha256_multiblk_16_avx512loop:
 .set .Lpadding, 0
 	
 	cmp		COUNT, 16
-	jb		sha256_8_avx2
+    jb      .Lret
 	
 	# Load pre-transposed digest
 	vmovdqa32	A, [DIGEST + 0*64]
@@ -985,6 +752,8 @@ sha256_16_avx512:
 	vmovdqa32	F, [DIGEST + 5*64]
 	vmovdqa32	G, [DIGEST + 6*64]
 	vmovdqa32	H, [DIGEST + 7*64]
+
+    mov BLK_CTR, N_BLK
 	
 	# Load incoming blocks 16 at a time, start loading the lower
 	# part of the 16 blocks
@@ -1004,22 +773,41 @@ sha256_16_avx512:
 	# W13 = {X X X X  X X X X  f15 f14 f13 f12   f11 f10 f9 f8}
 	# W14 = {X X X X  X X X X  g15 g14 g13 g12   g11 g10 g9 g8}
 	# W15 = {X X X X  X X X X  h15 h14 h13 h12   h11 h10 h9 h8}
-	vmovups	YW0,[DATA_PTR+0*64]
-	vmovups	YW1,[DATA_PTR+1*64]
-	vmovups	YW2,[DATA_PTR+2*64]
-	vmovups	YW3,[DATA_PTR+3*64]
-	vmovups	YW4,[DATA_PTR+4*64]
-	vmovups	YW5,[DATA_PTR+5*64]
-	vmovups	YW6,[DATA_PTR+6*64]
-	vmovups	YW7,[DATA_PTR+7*64]
-	vmovups	YW8,[DATA_PTR+0*64+32]
-	vmovups	YW9,[DATA_PTR+1*64+32]
-	vmovups	YW10,[DATA_PTR+2*64+32]
-	vmovups	YW11,[DATA_PTR+3*64+32]
-	vmovups	YW12,[DATA_PTR+4*64+32]
-	vmovups	YW13,[DATA_PTR+5*64+32]
-	vmovups	YW14,[DATA_PTR+6*64+32]
-	vmovups	YW15,[DATA_PTR+7*64+32]
+
+
+.macro LOAD_DATA
+    xor OFFSET, OFFSET
+	vmovups YW0,  [DATA_PTR + OFFSET]
+    add OFFSET, N_BLK
+	vmovups YW1,  [DATA_PTR + OFFSET]
+    add OFFSET, N_BLK
+	vmovups YW2,  [DATA_PTR + OFFSET]
+    add OFFSET, N_BLK
+	vmovups YW3,  [DATA_PTR + OFFSET]
+    add OFFSET, N_BLK
+	vmovups YW4,  [DATA_PTR + OFFSET]
+    add OFFSET, N_BLK
+	vmovups YW5,  [DATA_PTR + OFFSET]
+    add OFFSET, N_BLK
+	vmovups YW6,  [DATA_PTR + OFFSET]
+    add OFFSET, N_BLK
+	vmovups YW7,  [DATA_PTR + OFFSET]
+    xor OFFSET, OFFSET
+	vmovups YW8,  [DATA_PTR + OFFSET + 32]
+    add OFFSET, N_BLK
+	vmovups YW9,  [DATA_PTR + OFFSET + 32]
+    add OFFSET, N_BLK
+	vmovups YW10, [DATA_PTR + OFFSET + 32]
+    add OFFSET, N_BLK
+	vmovups YW11, [DATA_PTR + OFFSET + 32]
+    add OFFSET, N_BLK
+	vmovups YW12, [DATA_PTR + OFFSET + 32]
+    add OFFSET, N_BLK
+	vmovups YW13, [DATA_PTR + OFFSET + 32]
+    add OFFSET, N_BLK
+	vmovups YW14, [DATA_PTR + OFFSET + 32]
+    add OFFSET, N_BLK
+	vmovups YW15, [DATA_PTR + OFFSET + 32]
 
 	# Load the upper half
 	#
@@ -1040,26 +828,59 @@ sha256_16_avx512:
 	# W14 = {o15 o14 o13 o12   o11 o10 o9 o8   g15 g14 g13 g12   g11 g10 g9 g8}
 	# W15 = {p15 p14 p13 p12   p11 p10 p9 p8   h15 h14 h13 h12   h11 h10 h9 h8}
 
-	vinserti64x4 W0, W0, [DATA_PTR+8*64], 0x01
-	vinserti64x4 W1, W1, [DATA_PTR+9*64], 0x01
-	vinserti64x4 W2, W2, [DATA_PTR+10*64], 0x01
-	vinserti64x4 W3, W3, [DATA_PTR+11*64], 0x01
-	vinserti64x4 W4, W4, [DATA_PTR+12*64], 0x01
-	vinserti64x4 W5, W5, [DATA_PTR+13*64], 0x01
-	vinserti64x4 W6, W6, [DATA_PTR+14*64], 0x01
-	vinserti64x4 W7, W7, [DATA_PTR+15*64], 0x01
-	vinserti64x4 W8, W8, [DATA_PTR+8*64+32], 0x01
-	vinserti64x4 W9, W9, [DATA_PTR+9*64+32], 0x01
-	vinserti64x4 W10, W10, [DATA_PTR+10*64+32], 0x01
-	vinserti64x4 W11, W11, [DATA_PTR+11*64+32], 0x01
-	vinserti64x4 W12, W12, [DATA_PTR+12*64+32], 0x01
-	vinserti64x4 W13, W13, [DATA_PTR+13*64+32], 0x01
-	vinserti64x4 W14, W14, [DATA_PTR+14*64+32], 0x01
-	vinserti64x4 W15, W15, [DATA_PTR+15*64+32], 0x01
+    add OFFSET, N_BLK
+    mov OFFSET8, OFFSET
+	vinserti64x4 W0, W0,   [DATA_PTR + OFFSET], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W1, W1,   [DATA_PTR + OFFSET], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W2, W2,   [DATA_PTR + OFFSET], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W3, W3,   [DATA_PTR + OFFSET], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W4, W4,   [DATA_PTR + OFFSET], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W5, W5,   [DATA_PTR + OFFSET], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W6, W6,   [DATA_PTR + OFFSET], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W7, W7,   [DATA_PTR + OFFSET], 0x01
+    mov OFFSET, OFFSET8
+	vinserti64x4 W8, W8,   [DATA_PTR + OFFSET + 32], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W9, W9,   [DATA_PTR + OFFSET + 32], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W10, W10, [DATA_PTR + OFFSET + 32], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W11, W11, [DATA_PTR + OFFSET + 32], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W12, W12, [DATA_PTR + OFFSET + 32], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W13, W13, [DATA_PTR + OFFSET + 32], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W14, W14, [DATA_PTR + OFFSET + 32], 0x01
+    add OFFSET, N_BLK
+	vinserti64x4 W15, W15, [DATA_PTR + OFFSET + 32], 0x01
+.endm
+
+    LOAD_DATA
+
+    add DATA_PTR, 64
 
 .align 32
+.Lnextblk:
 	vmovdqa32	TMP2, [rip + .LPSHUFFLE_BYTE_FLIP_MASK]
 	vmovdqa32	TMP3, [TBL]	# First K
+
+	# Save digest for later processing
+    vmovdqa32   [rsp + 64*0], A
+    vmovdqa32   [rsp + 64*1], B
+    vmovdqa32   [rsp + 64*2], C
+    vmovdqa32   [rsp + 64*3], D
+    vmovdqa32   [rsp + 64*4], E
+    vmovdqa32   [rsp + 64*5], F
+    vmovdqa32   [rsp + 64*6], G
+    vmovdqa32   [rsp + 64*7], H
 
 
 	# W0   = {p0  o0  n0  m0    l0  k0  j0  i0    h0  g0  f0  e0    d0  c0  b0  a0}
@@ -1095,24 +916,46 @@ sha256_16_avx512:
 	MSG_SCHED_ROUND_16_63 W0, W1, W9, W14
 	ROTATE_ZMMS
 .endr
-.rept 16
+
+    sub BLK_CTR, 64
+    je  .Llastblk
+
+    // xor OFFSET, OFFSET
+.set .LI, 48
+.rept 8
 	PROCESS_LOOP W0
 	.set .LI, .LI+1
 	vmovdqa32	TMP3, [TBL + 64*.LI]	// Next Kt
+	// MSG_SCHED_ROUND_00_15_L
 	ROTATE_ZMMS
 .endr
+    // mov OFFSET8, OFFSET
+    // xor OFFSET, OFFSET
+.set .LI, 56
+.rept 8
+	PROCESS_LOOP W0
+	.set .LI, .LI+1
+	vmovdqa32	TMP3, [TBL + 64*.LI]	// Next Kt
+	// MSG_SCHED_ROUND_00_15_H
+	ROTATE_ZMMS
+.endr
+    // mov OFFSET8, OFFSET
+
+    LOAD_DATA
+
+    add DATA_PTR, 64
 
 	# Add old digest
-	vpaddd		A, A, [DIGEST + 0*64]
-	vpaddd		B, B, [DIGEST + 1*64]
-	vpaddd		C, C, [DIGEST + 2*64]
-	vpaddd		D, D, [DIGEST + 3*64]
-	vpaddd		E, E, [DIGEST + 4*64]
-	vpaddd		F, F, [DIGEST + 5*64]
-	vpaddd		G, G, [DIGEST + 6*64]
-	vpaddd		H, H, [DIGEST + 7*64]
+	vpaddd		A, A, [rsp + 0*64]
+	vpaddd		B, B, [rsp + 1*64]
+	vpaddd		C, C, [rsp + 2*64]
+	vpaddd		D, D, [rsp + 3*64]
+	vpaddd		E, E, [rsp + 4*64]
+	vpaddd		F, F, [rsp + 5*64]
+	vpaddd		G, G, [rsp + 6*64]
+	vpaddd		H, H, [rsp + 7*64]
 	
-	# Save digest for later processing
+    jmp .Lnextblk
 //	vmovdqa32	W0, A
 //	vmovdqa32	W1, B
 //	vmovdqa32	W2, C
@@ -1122,6 +965,26 @@ sha256_16_avx512:
 //	vmovdqa32	W6, G
 //	vmovdqa32	W7, H
 //
+
+.Llastblk:
+.set .LI, 48
+.rept 16
+	PROCESS_LOOP W0
+	.set .LI, .LI+1
+	vmovdqa32	TMP3, [TBL + 64*.LI]	// Next Kt
+	ROTATE_ZMMS
+.endr
+
+	# Add old digest
+	vpaddd		A, A, [rsp + 0*64]
+	vpaddd		B, B, [rsp + 1*64]
+	vpaddd		C, C, [rsp + 2*64]
+	vpaddd		D, D, [rsp + 3*64]
+	vpaddd		E, E, [rsp + 4*64]
+	vpaddd		F, F, [rsp + 5*64]
+	vpaddd		G, G, [rsp + 6*64]
+	vpaddd		H, H, [rsp + 7*64]
+
 	# Load transposing masks
 	vmovdqa32	TMP5, [rip + .LPSHUFFLE_TRANSPOSE_MASK3]
 	vmovdqa32	TMP6, [rip + .LPSHUFFLE_TRANSPOSE_MASK4]
@@ -1164,13 +1027,21 @@ sha256_16_avx512:
 	vmovdqu32 	[OUTPUT_PTR + 6*64], G
 	vmovdqu32 	[OUTPUT_PTR + 7*64], H
 
-	add		OUTPUT_PTR, 8*64
-	add		DATA_PTR, 16*64
-	sub		COUNT, 16
-	jmp		.Lsha256_16_avx512loop
+    add     OUTPUT_PTR, 8*64
+.rept 15
+    add     DATA_PTR, N_BLK
+.endr
+    sub     COUNT, 16
+    jmp     .Lsha256_multiblk_16_avx512loop
+
+.Lret:
+    mov     rsp, [rsp + 8 * 64]
+    // jb      sha256_multiblk_8_avx2
+    // ret
+    jb      sha256_multiblk_shani
 
 #ifdef __linux__ 
-.size sha256_16_avx512,.-sha256_16_avx512
+.size sha256_multiblk_16_avx512,.-sha256_multiblk_16_avx512
 .section .note.GNU-stack,"",@progbits
 #endif
 	
