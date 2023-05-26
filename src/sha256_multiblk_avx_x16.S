@@ -1036,9 +1036,8 @@ sha256_multiblk_16_avx512:
 
 .Lret:
     mov     rsp, [rsp + 8 * 64]
-    // jb      sha256_multiblk_8_avx2
-    // ret
-    jb      sha256_multiblk_shani
+    // jmp      sha256_multiblk_8_avx2
+    jmp      sha256_multiblk_shani
 
 #ifdef __linux__ 
 .size sha256_multiblk_16_avx512,.-sha256_multiblk_16_avx512
