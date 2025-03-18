@@ -30,7 +30,7 @@ testlibs = -lhashtree
 benchlibs = -lhashtree -lm
 
 # ifeq ($(HAVE_OPENSSL),1)
-CFLAGS += -DHAVE_OPENSSL
+CFLAGS += -DHAVE_OPENSSL -march=native
 benchlibs += -lcrypto
 testlibs += -lcrypto
 # endif
